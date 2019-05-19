@@ -46,11 +46,11 @@ type RandomNotifier struct {
 func NewRandomNotifier(sleep time.Duration) *RandomNotifier {
 	rand.Seed(time.Now().UnixNano())
 	c := make(chan interface{})
-	go func(c chan interface{}) {
+	go func() {
 		for {
 			time.Sleep(sleep)
 			c <- interface{}(rand.Intn(3))
 		}
-	}(c)
+	}()
 	return &RandomNotifier{c}
 }
