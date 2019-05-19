@@ -1,9 +1,6 @@
 package debounce
 
-import (
-	"log"
-	"time"
-)
+import "time"
 
 type Event struct {
 	Time    time.Time
@@ -48,7 +45,6 @@ func (w *Watcher) run() {
 		n := w.notified
 		select {
 		case payload := <-w.Notification:
-			log.Println("Got notified with", payload)
 			if n.Payload != payload {
 				w.notified = Event{
 					Time:    time.Now(),
@@ -60,7 +56,6 @@ func (w *Watcher) run() {
 			payload := n.Payload
 			if n.Payload != nil && r != payload {
 				if time.Since(n.Time) > w.BounceTime {
-					log.Println("Sending stable at", time.Now())
 					w.reported = payload
 					w.report <- payload
 				}
