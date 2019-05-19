@@ -18,7 +18,7 @@ type Watcher struct {
 	reported     interface{}
 }
 
-func Debounce(n chan interface{}, b time.Duration) chan interface{} {
+func Channel(n chan interface{}, b time.Duration) chan interface{} {
 	w := NewWatcher(n, b)
 	return w.report
 }

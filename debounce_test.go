@@ -7,9 +7,9 @@ import (
 	"time"
 )
 
-func TestDebounceWithRandomNotifications(t *testing.T) {
-	notifier := NewNotifier(4 * time.Millisecond)
-	c := Debounce(notifier.Notification, 10*time.Millisecond)
+func TestChannelWithRandomNotifications(t *testing.T) {
+	notifier := NewRandomNotifier(4 * time.Millisecond)
+	c := Channel(notifier.Notification, 10*time.Millisecond)
 
 	last := -1
 	for i := 0; i < 5; i++ {
@@ -24,7 +24,7 @@ func TestDebounceWithRandomNotifications(t *testing.T) {
 }
 
 func TestWatcherWithRandomNotifications(t *testing.T) {
-	notifier := NewNotifier(4 * time.Millisecond)
+	notifier := NewRandomNotifier(4 * time.Millisecond)
 	w := NewWatcher(notifier.Notification, 10*time.Millisecond)
 
 	last := -1
@@ -39,11 +39,11 @@ func TestWatcherWithRandomNotifications(t *testing.T) {
 	}
 }
 
-type Notifier struct {
+type RandomNotifier struct {
 	Notification chan interface{}
 }
 
-func NewNotifier(sleep time.Duration) *Notifier {
+func NewRandomNotifier(sleep time.Duration) *RandomNotifier {
 	rand.Seed(time.Now().UnixNano())
 	c := make(chan interface{})
 	go func(c chan interface{}) {
@@ -52,5 +52,5 @@ func NewNotifier(sleep time.Duration) *Notifier {
 			c <- interface{}(rand.Intn(3))
 		}
 	}(c)
-	return &Notifier{c}
+	return &RandomNotifier{c}
 }
